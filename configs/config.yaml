@@ -1,0 +1,67 @@
+# configs/config.yaml
+# 数据配置
+data:
+  data_dir: ../datasets/diffusion/processed/params/train0  # 数据目录
+  test_dir: ../datasets/diffusion/processed/params/test0   # 测试数据目录
+  cond_dir: ../datasets/diffusion/processed/conditions/train    # 条件向量目录
+  H: 64  # tensor高度
+  W: 32  # tensor宽度
+  condition_dim: 512  # 条件向量维度
+  num_layers: 2  # layer数量 (0和1)
+  val_ratio: 0.1
+  seed: 42
+  device: "cuda:0"
+  num_workers: 4
+
+# 模型配置
+model:
+  # Transformer配置
+  hidden_dim: 512
+  num_heads: 8
+  num_layers: 6
+  mlp_ratio: 4.0
+  dropout: 0.1
+  
+  # 条件嵌入配置
+  time_embed_dim: 128
+  cond_embed_dim: 128
+  layer_embed_dim: 64
+  
+  # Flow-Matching配置
+  flow:
+    sigma_min: 0.001
+    solver: "euler"  # euler, heun, rk4
+    num_steps: 50
+
+# 训练配置
+train:
+  exp_dir: exps/exp2  # 实验目录
+  batch_size: 20
+  num_epochs: 10000
+  scheduler_type: "cosine_warmup"
+  weight_decay: 0.01
+  grad_clip: 1.0
+  cond_drop_prob: 0.1  # 条件向量dropout概率
+  mixed_precision: true
+  ema_decay: 0.9999
+  
+  # 优化器
+  betas: [0.9, 0.999]
+  
+  # 学习率调度
+  scheduler: "cosine_warmup"  # cosine, linear, constant
+  lr: 5.0e-4
+  min_lr: 1.0e-8
+  
+  # 保存配置
+  save_every: 1000
+  val_every: 10
+  plot_every: 10
+
+# 推理配置
+inference:
+  num_steps: 50
+  guidance_scale: 1.0  # classifier-free guidance scale
+  batch_size: 16
+
+# 其他配置
